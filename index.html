@@ -616,7 +616,7 @@
     
     
     <script>
-        /* --- 1. DATA DICTIONARIES & QUESTIONS DATABASE --- */
+        /* --- 1. DATA DICTIONARIES & GENUINE QUESTIONS DATABASE --- */
         const DATA_CATEGORIES = [
             { id: "prog", name: "Programming", icon: "bi-braces-asterisk" },
             { id: "tech", name: "Teknologi", icon: "bi-cpu-fill" },
@@ -631,11 +631,11 @@
         ];
 
         const LEVEL_STAGES_CONFIG = {
-            1: { title: "Level 1: Easy", qCount: 5, time: 60, xp: 50 },
-            2: { title: "Level 2: Normal", qCount: 10, time: 90, xp: 100 },
-            3: { title: "Level 3: Hard", qCount: 15, time: 120, xp: 150 },
-            4: { title: "Level 4: Expert", qCount: 20, time: 150, xp: 200 },
-            5: { title: "Level 5: Master", qCount: 25, time: 180, xp: 300 }
+            1: { title: "Level 1: Easy", qCount: 3, time: 45, xp: 50 },
+            2: { title: "Level 2: Normal", qCount: 3, time: 60, xp: 100 },
+            3: { title: "Level 3: Hard", qCount: 3, time: 75, xp: 150 },
+            4: { title: "Level 4: Expert", qCount: 3, time: 90, xp: 200 },
+            5: { title: "Level 5: Master", qCount: 3, time: 105, xp: 300 }
         };
 
         const RECOGNIZED_ACHIEVEMENTS = [
@@ -649,38 +649,279 @@
             { id: "geo_king", name: "Geography King", icon: "bi-map-fill", desc: "Mencapai akurasi tinggi pada Geografi" }
         ];
 
-        function queryQuestionGenerator(catId, count) {
-            const subjects = {
-                prog: ["Variabel Eksekusi Memori", "Struktur Sintaksis Loop", "Kompilasi Deklarasi Array", "Paradigma Paradoks Pointer"],
-                tech: ["Infrastruktur Jaringan Cloud", "Arsitektur Algoritma AI", "Enkripsi Kriptografi Kunci", "Arsitektur Kuantum Mikroprosesor"],
-                hist: ["Garis Kronologi Peradaban", "Konflik Perjanjian Geopolitik", "Revolusi Industri Sosiologis", "Deklarasi Kedaulatan Wilayah"],
-                math: ["Persamaan Kalkulus Diferensial", "Matriks Probabilitas Diskrit", "Teorema Aljabar Linear", "Geometri Ruang Vektor"],
-                sci: ["Reaksi Termodinamika Entropi", "Mutasi Sintesis Protein", "Hukum Mekanika Kuantum Particles", "Komposisi Kimia Senyawa Organik"],
-                geo: ["Eksplorasi Lempeng Tektonik", "Klimatologi Barometrik Global", "Demografi Densitas Populasi", "Topografi Batas Kartografi"],
-                eng: ["Semantic Syntax Parsing", "Conjunction Conditional Clause", "Lexical Morphology Matrix", "Idiomatic Expression Structure"],
-                anime: ["Produksi Studio Animasi", "Adaptasi Narasi Manga", "Komposisi Audio Soundtrack", "Karakteristik Protagonis Arketipe"],
-                movie: ["Sutradara Sinematografi Estetik", "Konfigurasi Editing Frame Rate", "Distribusi Box Office Internasional", "Skrip Skenario Naratif Dialog"],
-                gen: ["Struktur Hukum Konstitusi", "Filosofi Logika Epistemologi", "Fluktuasi Moneter Makroekonomi", "Sistem Klasifikasi Taksonomi"]
-            };
-
-            let questions = [];
-            let chosenList = subjects[catId] || subjects["gen"];
-
-            for(let i = 1; i <= count; i++) {
-                let currentSubject = chosenList[(i % chosenList.length)];
-                questions.push({
-                    text: `Analisis Komparatif: Berapakah parameter optimal kode konfigurasi dari instruksi [${currentSubject}] pada segmentasi kasus indeks ${i}?`,
-                    options: [
-                        `Opsi Kompilasi Sistem Baku A-${i}`,
-                        `Fungsi Callback Validasi Interseptor B-${i}`,
-                        `Skema Alokasi Dinamis Buffer C-${i}`,
-                        `Prosedur Eksekusi Subsistem Paralel D-${i}`
-                    ],
-                    answer: (i * 3) % 4
-                });
+        // MASTER BANK SOAL UTUH (3 SOAL UNIK PER TINGKAT KESULITAN PER KATEGORI)
+        const QUIZ_DATABASE = {
+            prog: {
+                1: [
+                    { text: "Apa kepanjangan resmi dari singkatan HTML?", options: ["Hyper Text Markup Language", "High Tech Modern Language", "Hyperlink and Text Management", "Home Tool Markup Language"], answer: 0 },
+                    { text: "Tipe data manakah yang digunakan khusus untuk menyimpan nilai True atau False?", options: ["String", "Integer", "Boolean", "Float"], answer: 2 },
+                    { text: "Karakter apa yang digunakan untuk menutup baris statement di JavaScript, C++, dan Java?", options: [":", ";", ",", "."], answer: 1 }
+                ],
+                2: [
+                    { text: "Apakah hasil keluaran dari perintah kode 'typeof []' di dalam JavaScript?", options: ["array", "object", "null", "undefined"], answer: 1 },
+                    { text: "Tag HTML manakah yang benar untuk menyematkan pranala luar (link Hyperlink)?", options: ["<a>", "<link>", "<href>", "<url>"], answer: 0 },
+                    { text: "Method bawaan Python manakah yang berfungsi menambahkan elemen ke akhir list?", options: ["add()", "push()", "append()", "insert()"], answer: 2 }
+                ],
+                3: [
+                    { text: "Struktur data manakah yang menerapkan prinsip operasional LIFO (Last In First Out)?", options: ["Queue", "Tree", "Stack", "Graph"], answer: 2 },
+                    { text: "Pilar OOP manakah yang bertugas menyembunyikan detail implementasi internal objek?", options: ["Inheritance", "Encapsulation", "Polymorphism", "Abstraction"], answer: 1 },
+                    { text: "Perintah Git apakah yang digunakan untuk menggabungkan dua cabang (branch)?", options: ["git merge", "git push", "git clone", "git pull"], answer: 0 }
+                ],
+                4: [
+                    { text: "Berapakah rata-rata (average case) kompleksitas waktu algoritma Quick Sort?", options: ["O(n)", "O(n log n)", "O(n^2)", "O(log n)"], answer: 1 },
+                    { text: "Keyword pemrograman Go manakah yang berfungsi menunda eksekusi blok hingga fungsi selesai?", options: ["defer", "delay", "wait", "sleep"], answer: 0 },
+                    { text: "Manakah HTTP request method berikut yang bersifat 'Idempotent' secara spesifikasi?", options: ["POST", "GET", "PATCH", "CONNECT"], answer: 1 }
+                ],
+                5: [
+                    { text: "Di dalam mesin V8 JavaScript Engine, apakah peran utama dari komponen 'Ignition'?", options: ["Mengoptimalkan kode", "Interpreter untuk menghasilkan bytecode", "Garbage collector memori", "Compiler kode mesin"], answer: 1 },
+                    { text: "Kondisi multi-threading di mana dua thread berebut mengakses data bersamaan disebut...", options: ["Race Condition", "Deadlock", "Thread Leak", "Starvation"], answer: 0 },
+                    { text: "Manakah fitur utama GraphQL yang membedakannya secara signifikan dari arsitektur REST?", options: ["Menggunakan protokol HTTP", "Format respons data JSON", "Klien bebas menentukan struktur data yang diminta", "Memiliki status code"], answer: 2 }
+                ]
+            },
+            tech: {
+                1: [
+                    { text: "Apa kepanjangan utama dari komponen perangkat keras CPU?", options: ["Central Processing Unit", "Computer Power Unit", "Core Processing Utility", "Central Power User"], answer: 0 },
+                    { text: "Manakah perangkat keras komputer berikut yang bertindak sebagai media penyimpanan (storage)?", options: ["RAM", "CPU", "SSD", "GPU"], answer: 2 },
+                    { text: "Perusahaan teknologi raksasa manakah yang mengembangkan sistem operasi Android?", options: ["Apple", "Google", "Microsoft", "Samsung"], answer: 1 }
+                ],
+                2: [
+                    { text: "Perangkat jaringan yang bertugas mengarahkan rute paket data antar jaringan berbeda adalah...", options: ["Router", "Switch", "Hub", "Access Point"], answer: 0 },
+                    { text: "Berapakah nomor port default standar yang aman digunakan untuk protokol HTTPS internet?", options: ["80", "21", "443", "22"], answer: 2 },
+                    { text: "Apa kepanjangan dari istilah URL yang biasa dipakai pada alamat website?", options: ["Universal Resource Link", "Uniform Resource Locator", "United Registry Location", "User Response Locator"], answer: 1 }
+                ],
+                3: [
+                    { text: "Protokol standar enkripsi keamanan Wi-Fi nirkabel paling modern dan aman saat ini adalah...", options: ["WEP", "WPA", "WPA2", "WPA3"], answer: 3 },
+                    { text: "Apa kepanjangan dari istilah sistem DNS dalam arsitektur jaringan internet?", options: ["Domain Name System", "Data Network Storage", "Digital Node Security", "Dynamic Name Server"], answer: 0 },
+                    { text: "Manakah layanan komputasi awan (Cloud Computing) berikut yang masuk kategori SaaS?", options: ["AWS EC2", "Google Workspace", "Microsoft Azure", "Docker Hub"], answer: 1 }
+                ],
+                4: [
+                    { text: "Teknologi virtualisasi ringan berbasis kontainer pengisolasi aplikasi yang populer adalah...", options: ["VirtualBox", "VMware", "Docker", "Kubernetes"], answer: 2 },
+                    { text: "Arsitektur prosesor komputasi model RISC merupakan singkatan dari...", options: ["Reduced Instruction Set Computer", "Rapid Integrated System Core", "Random Internal Storage Controller", "Robotic Integrated System Computing"], answer: 0 },
+                    { text: "Lapisan (Layer) OSI manakah yang bertanggung jawab atas komunikasi end-to-end yang andal?", options: ["Network Layer", "Transport Layer", "Session Layer", "Physical Layer"], answer: 1 }
+                ],
+                5: [
+                    { text: "Teknik membagi database besar secara horizontal menjadi bagian kecil terdistribusi disebut...", options: ["Sharding", "Indexing", "Normalizing", "Replication"], answer: 0 },
+                    { text: "Dalam kluster Kubernetes, komponen manakah yang bertugas menunjuk node penampung Pod baru?", options: ["Kube-Apiserver", "Etcd", "Kube-Controller", "Kube-Scheduler"], answer: 3 },
+                    { text: "Serangan siber memanfaatkan celah keamanan baru yang belum diketahui oleh pembuat software disebut...", options: ["Phishing", "DDoS Attack", "Zero-Day Exploit", "Brute Force"], answer: 2 }
+                ]
+            },
+            hist: {
+                1: [
+                    { text: "Siapakah tokoh pahlawan nasional yang menjabat sebagai Presiden pertama Republik Indonesia?", options: ["Ir. Soekarno", "Drs. Moh. Hatta", "Soeharto", "Jenderal Sudirman"], answer: 0 },
+                    { text: "Kota di Jepang manakah yang dijatuhi bom atom pertama kali oleh Sekutu pada Perang Dunia II?", options: ["Nagasaki", "Hiroshima", "Tokyo", "Kyoto"], answer: 1 },
+                    { text: "Laksamana Cheng Ho yang terkenal melakukan penjelajah samudra berasal dari negara...", options: ["Jepang", "Korea", "Tiongkok", "Arab Saudi"], answer: 2 }
+                ],
+                2: [
+                    { text: "Kongsi dagang Hindia Timur VOC didirikan dan dikendalikan oleh kolonial negara...", options: ["Inggris", "Belanda", "Spanyol", "Portugis"], answer: 1 },
+                    { text: "Pada tahun berapakah peristiwa eskalasi militer Perang Dunia I resmi dimulai?", options: ["1914", "1918", "1939", "1945"], answer: 0 },
+                    { text: "Siapakah tokoh penjelajah Eropa legendaris yang dikreditkan menemukan benua Amerika?", options: ["Vasco da Gama", "Ferdinand Magellan", "Christopher Columbus", "Marco Polo"], answer: 2 }
+                ],
+                3: [
+                    { text: "Perundingan Linggajati diadakan pasca-kemerdekaan melibatkan diplomasi Indonesia dengan...", options: ["Belanda", "Inggris", "Jepang", "Sekutu"], answer: 0 },
+                    { text: "Tahun berapakah Revolusi Prancis bergolak meruntuhkan sistem monarki absolut?", options: ["1776", "1789", "1812", "1848"], answer: 1 },
+                    { text: "Kekaisaran Romawi Barat secara resmi runtuh dihantam migrasi suku asing pada abad ke-...", options: ["3 Masehi", "10 Masehi", "15 Masehi", "5 Masehi"], answer: 3 }
+                ],
+                4: [
+                    { text: "Konferensi Meja Bundar (KMB) tahun 1949 diselenggarakan di kota mana?", options: ["Jakarta", "Den Haag", "Amsterdam", "London"], answer: 1 },
+                    { text: "Siapakah perdana menteri Britania Raya yang memimpin selama mayoritas Perang Dunia II?", options: ["Winston Churchill", "Neville Chamberlain", "Clement Attlee", "Franklin Roosevelt"], answer: 0 },
+                    { text: "Kekaisaran Islam Dinasti Abbasiyah mencapai puncak keemasan sains di bawah khalifah...", options: ["Abu Abbas", "Al-Mansur", "Harun Ar-Rasyid", "Al-Ma'mun"], answer: 2 }
+                ],
+                5: [
+                    { text: "Siapakah sejarawan asal Yunani Kuno yang dinobatkan sebagai 'Bapak Sejarah Dunia'?", options: ["Herodotus", "Thucydides", "Socrates", "Aristoteles"], answer: 0 },
+                    { text: "Perjanjian Damai Westphalia 1648 mengakhiri konflik religius Eropa besar yang dikenal sebagai...", options: ["Perang Salib", "Perang Tiga Puluh Tahun", "Perang Seratus Tahun", "Perang Napoleon"], answer: 1 },
+                    { text: "Kerajaan Maritim Sriwijaya mengalami kemunduran masif akibat serbuan dinasti asal India bernama...", options: ["Majapahit", "Singasari", "Chola", "Chera"], answer: 2 }
+                ]
+            },
+            math: {
+                1: [
+                    { text: "Berapakah hasil aritmatika dari perhitungan matematika berikut: 5 + 3 x 2?", options: ["16", "11", "13", "10"], answer: 1 },
+                    { text: "Berapakah nilai riil dari akar pangkat dua angka 144?", options: ["12", "14", "16", "11"], answer: 0 },
+                    { text: "Sebuah bangun segitiga yang memiliki salah satu sudut tepat sebesar 90 derajat dinamakan...", options: ["Sama Sisi", "Sama Kaki", "Siku-siku", "Sembarang"], answer: 2 }
+                ],
+                2: [
+                    { text: "Berapakah nilai logaritma dari operasi matematika log10(1000)?", options: ["2", "3", "4", "1"], answer: 1 },
+                    { text: "Jika diketahui persamaan aljabar 2x + 5 = 15, berapakah nilai variabel x?", options: ["5", "10", "7.5", "4"], answer: 0 },
+                    { text: "Berapakah akumulasi total jumlah derajat sudut internal di dalam satu bangun segitiga apapun?", options: ["90", "360", "180", "270"], answer: 2 }
+                ],
+                3: [
+                    { text: "Berapakah hasil turunan kalkulus pertama dari persamaan fungsi f(x) = 3x^2?", options: ["6x", "3x", "6x^2", "x^3"], answer: 0 },
+                    { text: "Berapakah nilai trigonometri absolut dari sin(90 derajat)?", options: ["0", "1", "0.5", "-1"], answer: 1 },
+                    { text: "Matriks persegi yang elemen diagonal utamanya bernilai 1 dan sisanya 0 disebut matriks...", options: ["Nol", "Simetris", "Transpose", "Identitas"], answer: 3 }
+                ],
+                4: [
+                    { text: "Berapakah nilai integral tentu dari fungsi 2x dengan batas bawah 0 hingga batas atas 2?", options: ["2", "4", "8", "6"], answer: 1 },
+                    { text: "Berapa banyak jumlah susunan kata unik yang bisa dibuat dari 4 huruf kata 'RUST'?", options: ["24", "12", "6", "48"], answer: 0 },
+                    { text: "Di dalam rumus ABC kuadratik, parameter nilai Diskriminan (D) dirumuskan sebagai...", options: ["b - 4ac", "b^2 + 4ac", "b^2 - 4ac", "4ac - b^2"], answer: 2 }
+                ],
+                5: [
+                    { text: "Berapakah hasil kalkulus limit trigonometri untuk fungsi lim (x->0) dari sin(x)/x?", options: ["1", "0", "Tak terhingga", "Undefined"], answer: 0 },
+                    { text: "Siapakah ilmuwan logika matematika yang menelurkan 'Teorema Ketidaksempurnaan'?", options: ["Alan Turing", "Kurt Gödel", "John von Neumann", "Bertrand Russell"], answer: 1 },
+                    { text: "Berapakah nilai imajiner dari i kuadrat (i^2) dalam sistem komparasi bilangan kompleks?", options: ["1", "0", "-1", "i"], answer: 2 }
+                ]
+            },
+            sci: {
+                1: [
+                    { text: "Planet tata surya manakah yang memiliki lintasan orbit paling dekat dengan Matahari?", options: ["Merkurius", "Venus", "Mars", "Bumi"], answer: 0 },
+                    { text: "Kandungan gas kimia murni apakah yang paling melimpah ruah di atmosfer planet Bumi?", options: ["Oksigen", "Nitrogen", "Karbondioksida", "Hidrogen"], answer: 1 },
+                    { text: "Organ tubuh internal manusia manakah yang memiliki fungsi mekanis memompa aliran darah?", options: ["Paru-paru", "Hati", "Jantung", "Ginjal"], answer: 2 }
+                ],
+                2: [
+                    { text: "Zat pigmen hijau daun yang krusial membantu menggerakkan proses fotosintesis tumbuhan bernama...", options: ["Karotenoid", "Klorofil", "Antosianin", "Xantofil"], answer: 1 },
+                    { text: "Apakah simbol/lambang tabel periodik kimia resmi untuk unsur logam Emas?", options: ["Au", "Ag", "Fe", "Cu"], answer: 0 },
+                    { text: "Gelombang energi bunyi secara mutlak tidak akan mampu merambat melintasi...", options: ["Air laut", "Besi baja", "Ruang hampa udara", "Dinding kayu"], answer: 2 }
+                ],
+                3: [
+                    { text: "Berapakah kecepatan rambat gelombang cahaya konstan di dalam ruang hampa udara?", options: ["300.000 km/s", "150.000 km/s", "1.000.000 km/s", "30.000 km/s"], answer: 0 },
+                    { text: "Organel internal sel manakah yang bertindak selaku pusat respirasi dan generator energi?", options: ["Ribosom", "Mitokondria", "Badan Golgi", "Lisosom"], answer: 1 },
+                    { text: "Hukum fisika yang berbunyi gaya aksi akan melahirkan besaran gaya reaksi yang sama adalah Hukum...", options: ["I Newton", "II Newton", "Kepler", "III Newton"], answer: 3 }
+                ],
+                4: [
+                    { text: "Perubahan wujud wujud zat langsung dari fase gas menjadi padat dinamakan...", options: ["Menyublim", "Menguap", "Mengkristal / Deposisi", "Mencair"], answer: 2 },
+                    { text: "Penyakit endemik Malaria disebabkan infeksi mikroba Plasmodium via vektor nyamuk...", options: ["Anopheles", "Aedes Aegypti", "Culex", "Mansonia"], answer: 0 },
+                    { text: "Apakah satuan standar internasional (SI) yang baku untuk mengukur radioaktivitas?", options: ["Curie", "Becquerel", "Sievert", "Gray"], answer: 1 }
+                ],
+                5: [
+                    { text: "Tahun berapakah ilmuwan Albert Einstein mempublikasikan karya ilmiah Teori Relativitas Khusus?", options: ["1905", "1915", "1920", "1899"], answer: 0 },
+                    { text: "Hormon regulator gula darah yang diproduksi oleh jaringan sel organ pankreas adalah...", options: ["Adrenalin", "Insulin", "Tiroksin", "Estrogen"], answer: 1 },
+                    { text: "Partikel subatomik paling elementer fundamental yang menyusun struktur Proton dan Neutron adalah...", options: ["Elektron", "Lepton", "Quark", "Boson"], answer: 2 }
+                ]
+            },
+            geo: {
+                1: [
+                    { text: "Apakah nama kota yang ditetapkan menjadi Ibu Kota masa depan Negara Indonesia?", options: ["Nusantara", "Jakarta", "Bandung", "IKN Jaya"], answer: 0 },
+                    { text: "Benua terbesar di planet bumi dihitung berdasarkan total luas cakupan wilayahnya adalah...", options: ["Afrika", "Asia", "Amerika Utara", "Eropa"], answer: 1 },
+                    { text: "Kumpulan massa air laut Samudra terdalam sekaligus terluas di dunia adalah Samudra...", options: ["Atlantik", "Hindia", "Pasifik", "Arktik"], answer: 2 }
+                ],
+                2: [
+                    { text: "Gunung tertinggi di atas permukaan laut bumi yang berlokasi di pegunungan Himalaya bernama...", options: ["Gunung K2", "Gunung Everest", "Gunung Kilimanjaro", "Gunung Fuji"], answer: 1 },
+                    { text: "Negara manakah yang tercatat menguasai kavling wilayah geografis terbesar di dunia?", options: ["Rusia", "Kanada", "Tiongkok", "Amerika Serikat"], answer: 0 },
+                    { text: "Sungai terpanjang di dunia yang melintasi benua Afrika bagian timur bernama Sungai...", options: ["Amazon", "Mississippi", "Nil", "Yangtze"], answer: 2 }
+                ],
+                3: [
+                    { text: "Garis selat perairan yang memisahkan daratan Pulau Sumatera dengan Pulau Jawa dinamakan...", options: ["Selat Sunda", "Selat Malaka", "Selat Bali", "Selat Makassar"], answer: 0 },
+                    { text: "Gurun pasir kering terluas di dunia yang menyelimuti Afrika Utara bernama Gurun...", options: ["Gobi", "Sahara", "Kalahari", "Atacama"], answer: 1 },
+                    { text: "Negara Eropa manakah yang secara kultural dan ikonik dijuluki sebagai Negara Kincir Angin?", options: ["Jerman", "Prancis", "Inggris", "Belanda"], answer: 3 }
+                ],
+                4: [
+                    { text: "Garis imajiner bumi yang membelah area planet menjadi belahan Utara dan Selatan disebut...", options: ["Garis Meridian", "Garis Khatulistiwa", "Garis Bujur", "Garis Batas Tanggal"], answer: 1 },
+                    { text: "Danau air tawar terdalam purba di bumi yang berada di wilayah Siberia Rusia bernama...", options: ["Danau Baikal", "Danau Superior", "Danau Victoria", "Danau Toba"], answer: 0 },
+                    { text: "Apakah nama kota yang berstatus sebagai Ibu Kota pemerintahan resmi negara Australia?", options: ["Sydney", "Melbourne", "Canberra", "Brisbane"], answer: 2 }
+                ],
+                5: [
+                    { text: "Lokasi geografis manakah di bumi yang mencatat rekor pasang surut air laut ekstrem tertinggi?", options: ["Teluk Fundy", "Laut Merah", "Teluk Persia", "Laut Baltik"], answer: 0 },
+                    { text: "Negara transkontinental manakah yang daratannya berada di benua Eropa sekaligus Asia?", options: ["Mesir", "Turki", "Ukraina", "Yunani"], answer: 1 },
+                    { text: "Formasi batuan lancip stalaktit di gua kapur tumbuh berkembang mengarah dari...", options: ["Lantai naik ke atas", "Samping mendatar", "Langit-langit gua ke bawah", "Saling silang"], answer: 2 }
+                ]
+            },
+            eng: {
+                1: [
+                    { text: "What is the correct past tense form of the irregular verb 'go'?", options: ["went", "gone", "goed", "goes"], answer: 0 },
+                    { text: "Choose the correct pronoun: '___ is reading a book in the library right now.'", options: ["Him", "She", "Them", "Us"], answer: 1 },
+                    { text: "What is the exact grammatical antonym of the descriptive word 'hot'?", options: ["warm", "spicy", "cold", "dry"], answer: 2 }
+                ],
+                2: [
+                    { text: "Complete the conditional clause sentence: 'If it rains later, we ___ stay inside.'", options: ["would", "will", "have", "were"], answer: 1 },
+                    { text: "Which vocabulary word below is the closest synonym for the word 'beautiful'?", options: ["gorgeous", "ugly", "plain", "rough"], answer: 0 },
+                    { text: "Identify the part of speech (adjective) in: 'The quick brown fox jumps over the dog.'", options: ["fox", "jumps", "quick", "over"], answer: 2 }
+                ],
+                3: [
+                    { text: "Complete the sentence: 'By the time next December arrives, I ___ my college graduation.'", options: ["will have finished", "finished", "will finish", "am finishing"], answer: 0 },
+                    { text: "What type of English conditional sentence rule is this: 'If I were you, I would study harder.'?", options: ["First Conditional", "Second Conditional", "Third Conditional", "Zero Conditional"], answer: 1 },
+                    { text: "Transform 'She writes a beautiful letter' into its correct passive voice form:", options: ["A letter was written by her", "She is writing a letter", "A letter has written by her", "A letter is written by her"], answer: 3 }
+                ],
+                4: [
+                    { text: "What is the semantic meaning of the common English idiom 'bite the bullet'?", options: ["To eat something metallic", "To face a grim or difficult situation with courage", "To fail an exam miserably", "To start a dangerous fight"], answer: 1 },
+                    { text: "Choose the accurate preposition: 'She is completely independent ___ her parents.'", options: ["of", "from", "with", "by"], answer: 0 },
+                    { text: "Which sentence option perfectly utilizes the formal English subjunctive mood structure?", options: ["I want that he goes.", "If he was rich, he buys it.", "I demand that he be present.", "She wishes she is there."], answer: 2 }
+                ],
+                5: [
+                    { text: "What is the exact linguistic meaning of the sophisticated word 'ephemeral'?", options: ["Lasting for a very short fleeting time", "Extremely powerful and heavy", "Beautiful and colorful", "Old and historical"], answer: 0 },
+                    { text: "In linguistic science, what is the specific study of word structural formation called?", options: ["Phonology", "Morphology", "Syntax", "Semantics"], answer: 1 },
+                    { text: "Complete the formal grammar inversion: 'Hardly ___ entered the room when the alarm rang.'", options: ["he had", "did he", "had he", "was he"], answer: 2 }
+                ]
+            },
+            anime: {
+                1: [
+                    { text: "Siapakah nama karakter ninja protagonis utama dari serial anime 'Naruto'?", options: ["Naruto Uzumaki", "Sasuke Uchiha", "Kakashi Hatake", "Boruto Uzumaki"], answer: 0 },
+                    { text: "Harta karun legendaris apakah yang dicari oleh kelompok bajak laut Monkey D. Luffy?", options: ["All Blue", "One Piece", "Dragon Ball", "Sharingan"], answer: 1 },
+                    { text: "Apakah judul anime bertema olahraga olahraga bola basket klasik yang legendaris?", options: ["Haikyuu!!", "Blue Lock", "Slam Dunk", "Inazuma Eleven"], answer: 2 }
+                ],
+                2: [
+                    { text: "Siapakah nama sosok pelatih legendaris berwibawa dari tim basket Shohoku?", options: ["Pelatih Taoka", "Pelatih Anzai", "Pelatih Takatou", "Pelatih Kawata"], answer: 1 },
+                    { text: "Buku catatan misterius pembawa maut milik Shinigami Ryuk di anime thriller bernama...", options: ["Death Note", "Grimoire", "Book of Friends", "Future Diary"], answer: 0 },
+                    { text: "Siapakah nama jawara pahlawan berkepala botak terkuat di jagat One Punch Man?", options: ["Genos", "Garou", "Saitama", "Boros"], answer: 2 }
+                ],
+                3: [
+                    { text: "Studio animasi manakah yang memproduksi mahakarya film peraih Oscar 'Spirited Away'?", options: ["Studio Ghibli", "Toei Animation", "MAPPA", "Ufotable"], answer: 0 },
+                    { text: "Apakah nama perluasan domain/teknik andalan pelindung mutlak milik Satoru Gojo?", options: ["Malevolent Shrine", "Unlimited Void / Muryokusho", "Chimera Shadow Garden", "Coffin of the Iron Mountain"], answer: 1 },
+                    { text: "Dalam mitologi takdir Attack on Titan, siapakah individu pewaris kekuatan Beast Titan?", options: ["Eren Jaeger", "Reiner Braun", "Armin Arlert", "Zeke Jaeger"], answer: 3 }
+                ],
+                4: [
+                    { text: "Siapakah mangaka legendaris yang menciptakan mahakarya waralaba 'Dragon Ball'?", options: ["Eichiro Oda", "Akira Toriyama", "Masashi Kishimoto", "Tite Kubo"], answer: 1 },
+                    { text: "Di dalam semesta Hunter x Hunter, apa tipe klasifikasi aura Nen bawaan Killua Zoldyck?", options: ["Transmutation / Perubahan", "Enhancement / Penguatan", "Conjuration / Penjelmaan", "Emission / Pancaran"], answer: 0 },
+                    { text: "Apa nama pedang hitam pusaka utama yang digenggam Kirito dalam game Sword Art Online?", options: ["Dark Repulser", "Lambent Light", "Elucidator", "Blue Rose Sword"], answer: 2 }
+                ],
+                5: [
+                    { text: "Siapakah sosok sutradara visioner di balik kesuksesan global film anime 'Your Name'?", options: ["Makoto Shinkai", "Hayao Miyazaki", "Mamoru Hosoda", "Hideaki Anno"], answer: 0 },
+                    { text: "Di dalam serial mecha Neon Genesis Evangelion, apa nama organisasi taktis militer pelindung bumi?", options: ["SEELE", "NERV", "GEHIRN", "WILLE"], answer: 1 },
+                    { text: "Apakah hukum sains mutlak yang mengikat seluruh transmutasi alkimia di anime Fullmetal Alchemist?", options: ["Hukum Gravitasi", "Hukum Termodinamika", "Pertukaran Setara / Equivalent Exchange", "Kekekalan Massa"], answer: 2 }
+                ]
+            },
+            movie: {
+                1: [
+                    { text: "Siapakah nama karakter pahlawan super Marvel pemimpin Avengers bersenjata perisai vibranium?", options: ["Captain America", "Iron Man", "Thor", "Spider-Man"], answer: 0 },
+                    { text: "Film animasi klasik Disney manakah yang menceritakan pertumbuhan anak singa bernama Simba?", options: ["Aladdin", "The Lion King", "Tarzan", "Mulan"], answer: 1 },
+                    { text: "Aktor laga kawakan Indonesia manakah yang membintangi film aksi ikonik 'The Raid'?", options: ["Joe Taslim", "Yayan Ruhian", "Iko Uwais", "Donny Alamsyah"], answer: 2 }
+                ],
+                2: [
+                    { text: "Sutradara jenius manakah yang menukangi film fiksi ilmiah berliku 'Inception'?", options: ["Steven Spielberg", "Christopher Nolan", "Quentin Tarantino", "James Cameron"], answer: 1 },
+                    { text: "Siapakah nama penjahat badut psikopat musuh bebuyutan Batman di film The Dark Knight?", options: ["Joker", "Bane", "Two-Face", "Riddler"], answer: 0 },
+                    { text: "Film fiksi sains box-office terlaris garapan James Cameron tentang alien suku Na'vi bernama...", options: ["Titanic", "Interstellar", "Avatar", "Star Wars"], answer: 2 }
+                ],
+                3: [
+                    { text: "Film thriller satire Korea Selatan sejarah manakah yang sukses menyabet Best Picture Oscar 2020?", options: ["Parasite", "Oldboy", "Train to Busan", "The Handmaiden"], answer: 0 },
+                    { text: "Siapakah maestro komposer musik legendaris di balik megahnya scoring tema film Star Wars?", options: ["Hans Zimmer", "John Williams", "Danny Elfman", "Ennio Morricone"], answer: 1 },
+                    { text: "Aktor berbakat manakah yang memerankan tokoh seniman romantis Jack Dawson di film Titanic?", options: ["Brad Pitt", "Johnny Depp", "Tom Cruise", "Leonardo DiCaprio"], answer: 3 }
+                ],
+                4: [
+                    { text: "Pada tahun kapankah bagian pertama film mafia legendaris 'The Godfather' dirilis perdana?", options: ["1968", "1972", "1975", "1980"], answer: 1 },
+                    { text: "Siapakah sutradara kawakan Hollywood di balik mahakarya kelam sejarah 'Schindler's List'?", options: ["Steven Spielberg", "Martin Scorsese", "Ridley Scott", "David Fincher"], answer: 0 },
+                    { text: "Teknik rotasi kamera melambat 360 derajat mengitari aksi Neo di film The Matrix disebut...", options: ["Chroma Key", "CGI Motion", "Bullet Time", "Stop Motion"], answer: 2 }
+                ],
+                5: [
+                    { text: "Film epik kolosal klasik manakah yang pertama kali mencetak rekor sapu bersih 11 Piala Oscar?", options: ["Ben-Hur", "Titanic", "The Lord of the Rings 3", "Gone with the Wind"], answer: 0 },
+                    { text: "Istilah elemen narasi 'MacGuffin' dalam penulisan skenario sinema bermakna sebagai...", options: ["Karakter komedi", "Objek pemicu misteri yang menggerakkan motivasi plot", "Plot twist akhir", "Klimaks adegan"], answer: 1 },
+                    { text: "Sinematografer legendaris manakah yang memenangkan piala Oscar lewat visual film Blade Runner 2049?", options: ["Emmanuel Lubezki", "Robert Richardson", "Roger Deakins", "Wally Pfister"], answer: 2 }
+                ]
+            },
+            gen: {
+                1: [
+                    { text: "Kombinasi warna apakah yang menyusun bendera nasional resmi Negara Kesatuan Republik Indonesia?", options: ["Merah Putih", "Merah Biru", "Putih Merah", "Hijau Putih"], answer: 0 },
+                    { text: "Apakah nama mata uang resmi negara berdaulat Kekaisaran Jepang?", options: ["Won", "Yen", "Yuan", "Dollar"], answer: 1 },
+                    { text: "Berapakah akumulasi jumlah hari kalender yang tepat di dalam satu tahun kabisat?", options: ["365 hari", "360 hari", "366 hari", "367 hari"], answer: 2 }
+                ],
+                2: [
+                    { text: "Situs bangunan peninggalan bersejarah Menara Miring Pisa berlokasi di negara...", options: ["Spanyol", "Italia", "Yunani", "Prancis"], answer: 1 },
+                    { text: "Monumen Patung Liberty mulanya merupakan hadiah persahabatan dari negara mana untuk Amerika?", options: ["Prancis", "Inggris", "Jerman", "Rusia"], answer: 0 },
+                    { text: "Apakah nama spesies hewan mamalia terbesar yang hidup di samudera planet bumi saat ini?", options: ["Gajah Afrika", "Hiu Megalodon", "Paus Biru", "Lumba-lumba Orca"], answer: 2 }
+                ],
+                3: [
+                    { text: "Siapakah seniman jenius zaman Renaissance di balik mahakarya lukisan 'Mona Lisa'?", options: ["Leonardo da Vinci", "Michelangelo", "Raphael", "Donatello"], answer: 0 },
+                    { text: "Badan atau organisasi khusus PBB yang mengurusi sektor Pendidikan, Sains, dan Kebudayaan adalah...", options: ["UNICEF", "UNESCO", "WHO", "WTO"], answer: 1 },
+                    { text: "Negara manakah yang menempati peringkat satu populasi penduduk terbanyak di dunia saat ini?", options: ["Amerika Serikat", "Indonesia", "Tiongkok", "India"], answer: 3 }
+                ],
+                4: [
+                    { text: "Siapakah tokoh penemu mesin cetak pertama Eropa yang memicu ledakan revolusi literasi?", options: ["Galileo Galilei", "Johannes Gutenberg", "Isaac Newton", "James Watt"], answer: 1 },
+                    { text: "Garis Selat Gibraltar secara geografis menghubungkan Samudra Atlantik bebas dengan...", options: ["Laut Mediterania", "Laut Merah", "Laut Karibia", "Laut Hitam"], answer: 0 },
+                    { text: "Di kota manakah upacara penganugerahan Hadiah Nobel bergengsi rutin digelar tiap tahunnya?", options: ["Oslo", "Kopenhagen", "Stockholm", "Helsinki"], answer: 2 }
+                ],
+                5: [
+                    { text: "Perjanjian diplomatik manakah yang secara formal mengakhiri krisis Perang Dunia I?", options: ["Perjanjian Versailles", "Perjanjian Linggajati", "Perjanjian Westphalia", "Perjanjian Tordesillas"], answer: 0 },
+                    { text: "Siapakah filsuf besar Yunani Kuno klasik yang menulis risalah kenegaraan bertajuk 'Republic'?", options: ["Aristoteles", "Plato", "Socrates", "Epicurus"], answer: 1 },
+                    { text: "Terusan Suez yang vital bagi perdagangan maritim menghubungkan Laut Mediterania dengan Laut...", options: ["Laut Hitam", "Laut Kaspia", "Laut Merah", "Laut Mati"], answer: 2 }
+                ]
             }
-            return questions;
-        }
+        };
 
         /* --- 2. RETRO SOUND SYNTHESIZER ENGINE (WEB AUDIO API) --- */
         const AudioEngine = {
@@ -768,7 +1009,6 @@
         function switchView(viewId) {
             AudioEngine.play('click');
             
-            // JIKA Berpindah dari Hero Utama menuju Dashboard Hub, eksekusi proses loading tanpa lompatan scroll
             if (viewId === 'view-dashboard' && document.getElementById('view-hero').classList.contains('active')) {
                 executeMockupLoadingSequence();
                 return;
@@ -777,7 +1017,7 @@
             document.querySelectorAll('.game-view').forEach(v => v.classList.remove('active'));
             const target = document.getElementById(viewId);
             target.classList.add('active');
-            target.scrollTop = 0; // Kembalikan kontainer internal ke atas secara instan tanpa proses geser visual window
+            target.scrollTop = 0; 
             
             if (viewId === 'view-dashboard') renderDashboardHub();
         }
@@ -798,7 +1038,7 @@
             
             const sequenceLogs = [
                 "ALLOCATING QUANTUM CORE...",
-                "DECRYPTING QUIZ ARRAYS...",
+                "DECRYPTING REAL QUIZ ARRAYS...",
                 "CACHING GRAPHICS MATRIX...",
                 "STABILIZING PARTICLES...",
                 "SYSTEM DEPLOYED."
@@ -808,7 +1048,7 @@
             loadStatusText.innerText = sequenceLogs[currentLogIndex];
             
             const progressTimer = setInterval(() => {
-                progress += Math.floor(Math.random() * 8) + 5; // Kecepatan increment acak bernuansa retro game load
+                progress += Math.floor(Math.random() * 8) + 5; 
                 if (progress >= 100) {
                     progress = 100;
                     clearInterval(progressTimer);
@@ -869,7 +1109,7 @@
                     <div class="pixel-container category-node">
                         <div class="category-meta">
                             <div class="category-icon"><i class="bi ${cat.icon}"></i></div>
-                            <div class="pixel-title flex-title" style="font-size:12px;">${cat.name}</div>
+                            <div class="pixel-title" style="font-size:12px;">${cat.name}</div>
                         </div>
                         <div class="stage-line">${dotsHtml}</div>
                     </div>
@@ -941,14 +1181,37 @@
             });
         }
 
-        /* --- 7. RUNTIME GAMEPLAY PROCESSING ENGINE --- */
+        /* --- 7. INJEKSI LOGIKA GENERATOR SESUAI DATABASE ASLI --- */
+        function queryQuestionGenerator(catId, stageNum, count) {
+            let pool = [];
+            // Mengambil pool data asli berdasarkan kategori dan level kesulitan
+            if (QUIZ_DATABASE[catId] && QUIZ_DATABASE[catId][stageNum]) {
+                pool = QUIZ_DATABASE[catId][stageNum];
+            } else {
+                pool = QUIZ_DATABASE["gen"][1]; // Fallback aman ke umum level 1
+            }
+
+            let questions = [];
+            for(let i = 0; i < count; i++) {
+                // Modulo dipasang agar rotasi data aman dan tidak crash jika hitungan melebihi pool
+                let targetData = pool[i % pool.length];
+                questions.push({
+                    text: targetData.text,
+                    options: [...targetData.options],
+                    answer: targetData.answer
+                });
+            }
+            return questions;
+        }
+
         function initiateQuizSession(catId, stageNum) {
             const cfg = LEVEL_STAGES_CONFIG[stageNum];
             const catObj = DATA_CATEGORIES.find(c => c.id === catId);
             
             runtimeQuiz.catId = catId;
             runtimeQuiz.stageNum = stageNum;
-            runtimeQuiz.list = queryQuestionGenerator(catId, cfg.qCount);
+            // Memasukkan parameter nomor stage/level kesulitan agar kuis sinkron
+            runtimeQuiz.list = queryQuestionGenerator(catId, stageNum, cfg.qCount);
             runtimeQuiz.currentIdx = 0;
             runtimeQuiz.scoreGained = 0;
             runtimeQuiz.correct = 0;
